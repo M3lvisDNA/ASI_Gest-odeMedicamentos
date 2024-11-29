@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Medicamentos</title>
+</head>
+
+
+<body style="align-content: center; justify-content: center; display: flex;">
+	
+    <table border="3"> 
+        <thead>
+            <tr>
+                <th colspan="8">Lista de Medicamentos</th>
+            </tr>
+            <tr>
+                <th>ID</th>
+                <th>Nome do Medicamento</th>
+                <th>Preço</th>
+                <th>Quantidade</th>
+                <th>Fabricante</th>
+                <th>Validade</th>
+                <th>Stock</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="medicamentos : ${farmacia}"> <!--Chama a base de dados-->
+                <td th:text="${medicamentos.id}">ID</td> <!-- Chama todos os dados salvos na coluna ID-->
+                <td th:text="${medicamentos.nome}">Nome</td> <!-- Chama todos os dados salvos na coluna nome-->
+                 <td th:text="${medicamentos.preco}">Preço</td> <!-- Chama todos os dados salvos na coluna preco-->
+                <td th:text="${medicamentos.quantidade}" class="quantidade">Quantidade</td> <!-- Chama todos os dados salvos na coluna quantidade-->
+                <td th:text="${medicamentos.fabricante}">Fabricante</td> <!-- Chama todos os dados salvos na coluna fabricante-->
+                <td th:text="${medicamentos.validade}">Validade</td> <!-- Chama todos os dados salvos na coluna validade-->
+                <td class="stockC">
+                    <span th:if="${medicamentos.quantidade < 5}" class="stockBaixo">Stock Baixo</span> <!-- Diz se o estoque esta baixo baseado num valor predifinido-->
+                    <span th:if="${medicamentos.quantidade >= 5}" class="stockBom">Stock Bom</span> <!-- Diz se o estoque esta alto baseado num valor predifinido-->
+                </td>
+                <td>
+                    <a th:href="@{/farmacia/edit/{id}(id=${medicamentos.id})}">Editar</a> <!--Isto leva a pagina onde se pode editar o produto-->
+                    <a th:href="@{/farmacia/delete/{id}(id=${medicamentos.id})}" 
+                    onclick="return confirm('Tem a certeza que deseja apagar este item?')">Apagar</a> <!--Este link elimina chama o metodo deleteMed, e tem o onclick que pergunta se o usuario quer eliminar ou nao o item-->
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+<!--O java script trata de dar cor ao stock-->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+    const stockN = document.querySelectorAll(".stockBaixo");
+    const stockB = document.querySelectorAll(".stockBom");
+
+    stockN.forEach(stockNElement => {
+        stockNElement.style.color = "red";
+    });
+
+    stockB.forEach(stockBElement => {
+        stockBElement.style.color = "green";
+    });
+});
+</script>
